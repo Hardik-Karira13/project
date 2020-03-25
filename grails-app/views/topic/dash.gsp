@@ -49,10 +49,10 @@
   <span class="caret"></span></button>
   <ul class="dropdown-menu">
     <li><a href="#">Profile</a></li>
-    <li><a href="#">Users</a></li>
+    <li><g:link controller="users" action="abc">Users</g:link></li>
     <li><a href="#">Topics</a></li>
     <li><a href="#">Posts</a></li>
-    <li><a href="#">Logout</a></li>
+    <li><g:link controller="users">Logout</g:link></li>
   </ul>
 </div>
 </div>
