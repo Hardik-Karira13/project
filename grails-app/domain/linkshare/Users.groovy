@@ -10,12 +10,12 @@ class Users {
     byte[] photo
     Date dateCreated
     Date lastUpdated
-    static transients = ['confirmPassword']
-    //String city
-    //int age
+    boolean active =true
+    boolean admin
+    static transients = ['confirmPassword','active','admin']
+
 
     static constraints = {
-        //city nullable : true
         firstName blank: false, nullable: false
         lastName blank: false, nullable: false
         userName(unique: true, blank: false)
@@ -23,15 +23,16 @@ class Users {
          photo(blank: true, nullable: true, maxSize: 1073741824)
         dateCreated nullable:true
         lastUpdated nullable:true
-        /*password(size: 5..15, blank: false)
+         password(size: 5..15, blank: false)
         confirmPassword(bindable: true, nullable: true, blank: true,validator: { val, obj ->
             if (obj.password == val) {
                 return true
+                println "credendial matches"
             }
-        })*/
-        //age min: 18
+        })
+        active nullable: false
+        admin nullable: true
     }
-
     static mapping = {
         lastName column: 'LNAME'
         photo column:'photo', sqltype:'blob'
