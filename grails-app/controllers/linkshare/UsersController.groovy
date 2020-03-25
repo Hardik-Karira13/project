@@ -10,6 +10,10 @@ class UsersController {
     // @Autowired
     //UsersService usersService
     def index(){
+        if(session.email)
+        {
+            session.invalidate()
+        }
         render(view:'home')
     }
     def register(){
@@ -32,7 +36,8 @@ class UsersController {
         if (l1) {
             String ps = l1.password
             if (ps == params.psw) {
-                flash.success = params.email
+                flash.success = session.email
+                //l1.active=true
                 redirect(controller: 'topic', action: 'index')
             } else {
                 flash.error = "Invalid password"
@@ -52,6 +57,18 @@ class UsersController {
         response.contentLength = imageInByte.length
         response.outputStream << imageInByte
 
+    }
+    def abc(){
+        Users u1=Users.findByUserName(session.email)
+        def list=[a:u1.id,b:u1.userName,c:u1.email,d:u1.firstName,e:u1.lastName,f:u1.active]
+        render(view:'userss',model:[l:list])
+    }
+    def pqr()
+    {
+        Users u2=Users.findByUserName(session.email)
+        u2.delete(flush: true)
+        flash.error="User Record Deleted"
+        render(view:'home')
     }
    /* UsersService usersService
 
