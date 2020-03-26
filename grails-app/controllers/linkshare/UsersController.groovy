@@ -7,37 +7,43 @@ import org.springframework.web.multipart.MultipartFile
 import static org.springframework.http.HttpStatus.*
 
 class UsersController {
-    // @Autowired
-    //UsersService usersService
+     @Autowired
+     UsersService usersService
     def index(){
-        if(session.email)
-        {
-            session.invalidate()
-        }
         render(view:'home')
     }
-    def register(){
-         //session.phto=params.phto
-        Users f=new Users(firstName:params.fname,lastName:params.lname,email:params.emil,userName:params.uname,password:params.psw1,photo:params.phto.bytes)
-        session.phto=params.phto
-        // MultipartFile myFile=params.phto
-       // File file=new File("/home/images/${myFile.originalFilename}")
-        //f.properties['phto']=params.phto
-        //println FirstCO.validate()
-        //First f=new First()
-        //f.properties=firstCO.properties
+    def register(UsersCO usersCO){
+         //MultipartFile myFile=params.phto
+         //File file=new File("/home/images/${myFile.originalFilename}")
+        usersCO.firstName=params.fname
+        usersCO.lastName=params.lname
+        usersCO.email=params.emil
+        usersCO.userName=params.uname
+        usersCO.password=params.psw1
+        usersCO.photo=params.phto.bytes
+        if(usersCO.hasErrors()){
+            usersCO.errors.allErrors.each{
+                println it
+            }
+        }
+        Users f=new Users()
+        f.properties=usersService.method2(usersCO)
         f.save(flush:true)
+        if(f.hasErrors())
+        {
+         f.errors.allErrors.each{println it}
+        }
         flash.message="Successfully Registered"
         render(view:'home')
     }
     def login() {
         Users l1 = Users.findByUserName(params.email)
-        session.email = params.email
         if (l1) {
             String ps = l1.password
             if (ps == params.psw) {
+                session.email = params.email
                 flash.success = session.email
-                //l1.active=true
+                l1.active=1
                 redirect(controller: 'topic', action: 'index')
             } else {
                 flash.error = "Invalid password"
@@ -51,7 +57,7 @@ class UsersController {
     }
     def fetchImage(){
         //Users f2=Users.findByUserName(session.email)
-        File file=new File(session.phto)
+        File file=new File("/home/images/person.jpeg")
         byte[] imageInByte = file.getBytes()
         response.contentType = 'image/jpeg' // or the appropriate image content type
         response.contentLength = imageInByte.length
@@ -60,7 +66,7 @@ class UsersController {
     }
     def abc(){
         Users u1=Users.findByUserName(session.email)
-        def list=[a:u1.id,b:u1.userName,c:u1.email,d:u1.firstName,e:u1.lastName,f:u1.active]
+        def list=[a:1,b:u1.userName,c:u1.email,d:u1.firstName,e:u1.lastName,f:u1.active]
         render(view:'userss',model:[l:list])
     }
     def pqr()
@@ -70,6 +76,7 @@ class UsersController {
         flash.error="User Record Deleted"
         render(view:'home')
     }
+
    /* UsersService usersService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
