@@ -6,7 +6,6 @@ class Topic {
     Users createdBy
     Date dateCreated
     Date lastUpdated
-   // String visibility
     Visibility visibility
     enum Visibility{
         Private(0),Public(1)
