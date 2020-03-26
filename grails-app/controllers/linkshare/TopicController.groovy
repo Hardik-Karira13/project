@@ -12,7 +12,7 @@ class TopicController {
     }
     def second(){
         Topic l2=new Topic(name:params.nme,visibility: params.visi)
-        Users.findByUserName(session.email)
+        //Users.findByUserName(session.email)
         l2.createdBy=Users.findByUserName(session.email)
         l2.save(flush:true)
         Subscription s=new Subscription()
@@ -22,7 +22,7 @@ class TopicController {
         s.save(flush: true)
         if(!topicService.method1(s))
         {
-            s.errors.allErrors{println it}
+            s.errors.allErrors.each{println it}
         }
         flash.message="Topic created and Subscribed"
         render(view:'dash')
@@ -34,7 +34,9 @@ class TopicController {
         r.rtopic=Topic.findByName(params.tpic1)
         r.save(flush:true)
         if(r.hasErrors()){
-            r.errors.allErrors{println it}
+           r.errors.allErrors.each{
+                println it
+            }
         }
         LinkResources lr=new LinkResources()
         lr.url=params.lnk
@@ -50,7 +52,9 @@ class TopicController {
         r1.rtopic=Topic.findByName(params.tpic2)
         r1.save(flush:true)
         if(r1.hasErrors()){
-            r1.errors.allErrors{println it}
+            r1.errors.allErrors.each{
+                println it
+            }
         }
         DocumentResources dr=new DocumentResources()
         dr.document=params.doc
@@ -58,6 +62,34 @@ class TopicController {
         dr.save(flush:true)
         flash.message="Document Created"
         render(view: 'dash')
+    }
+    def posts(){
+        render(view:'posts')
+    }
+    def topics()
+    {
+        render(view:'topics')
+    }
+    def invites()
+    {
+        Subscription s2=new Subscription()
+          s2.user=Users.findByEmail(params.eme)
+           s2.topic=Topic.findByName(params.tpic)
+        s2.seriousness="Serious"
+        if(s2.hasErrors()){
+            s2.errors.allErrors.each{
+                println it
+            }
+        }
+        s2.save(flush:true)
+        render(view: 'dash')
+    }
+    def logoff()
+    {
+        Users u=Users.findByUserName(session.email)
+        u.active=0
+        session.invalidate()
+        redirect(controller:'users')
     }
 
     /*TopicService topicService
