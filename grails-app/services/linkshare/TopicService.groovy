@@ -2,7 +2,7 @@ package linkshare
 
 import grails.gorm.services.Service
 
-class TopicService implements grails.validation.Validateable{
+class TopicService{
 
        def method1(obj)
       {
