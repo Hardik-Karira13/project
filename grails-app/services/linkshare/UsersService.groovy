@@ -2,10 +2,10 @@ package linkshare
 
 import grails.gorm.services.Service
 
-class UsersService implements grails.validation.Validateable{
+class UsersService{
 
-     /*def method2(obj)
+     def method2(obj)
     {
-
-    }*/
+         return obj.properties
+    }
 }
