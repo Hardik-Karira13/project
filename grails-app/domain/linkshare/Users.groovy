@@ -1,5 +1,7 @@
 package linkshare
 
+import org.springframework.web.multipart.MultipartFile
+
 class Users {
     String firstName
     String lastName
@@ -10,7 +12,7 @@ class Users {
     byte[] photo
     Date dateCreated
     Date lastUpdated
-    boolean active =true
+    boolean active
     boolean admin
     static transients = ['confirmPassword','active','admin']
 
@@ -30,11 +32,11 @@ class Users {
                 println "credendial matches"
             }
         })
-        active nullable: false
+        active(blank: false, nullable: true)
         admin nullable: true
     }
     static mapping = {
         lastName column: 'LNAME'
-        photo column:'photo', sqltype:'blob'
+        photo column:'photo'
     }
 }
