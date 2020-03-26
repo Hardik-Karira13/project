@@ -50,9 +50,9 @@
   <ul class="dropdown-menu">
     <li><a href="#">Profile</a></li>
     <li><g:link controller="users" action="abc">Users</g:link></li>
-    <li><a href="#">Topics</a></li>
-    <li><a href="#">Posts</a></li>
-    <li><g:link controller="users">Logout</g:link></li>
+    <li><g:link controller="topic" action="topics">Topics</g:link></li>
+    <li><g:link controller="topic" action="posts">Posts</g:link></li>
+    <li><g:link action="logoff">Logout</g:link></li>
   </ul>
 </div>
 </div>
@@ -316,7 +316,7 @@
 </div>
 
 
-<g:form action=''>
+<g:form action='invites'>
 <div class="modal fade" id="myModal" role="dialog">
   <div class="modal-dialog">
 <div class="modal-content">
@@ -481,8 +481,7 @@
 <div class="modal-content">
     <div class="modal-header" style="background-color:gray";>Picture</div>
     <div class="modal-body">
-    <g:createLink controller="users" action="fetchImage" />
-    <a href="${createLink(controller:'users',action: 'fetchImage')}">my link</a>
+    <g:link controller="users" action="fetchImage">Download</g:link>
     </div>
 </div>
 </div>
