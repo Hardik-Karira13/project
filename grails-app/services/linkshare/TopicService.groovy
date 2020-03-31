@@ -16,4 +16,15 @@ class TopicService{
           }
 
       }
+    /*def method2(){
+        List<Subscription> subscriptionList=Subscription.createCriteria().list{
+            projections{
+                count()
+             property('topic')
+                'topic'{
+
+                }
+            }
+        }
+    }*/
 }

@@ -76,7 +76,7 @@
      <td>${l.d}</td>
      <td>${l.e}</td>
      <td>${l.f}</td>
-     <td><g:link controller="users" action="pqr">Deactivate</g:link></td>
+     <td><g:link controller="users" action="deleteUser">Deactivate</g:link></td>
     </tr>
     </tbody>
   </table>

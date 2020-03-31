@@ -10,14 +10,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-     <g:if test="${flash.message}">
-                      <div class="alert alert-success" style="display: block" id="def">${flash.message}</div>
-                 </g:if>
-                 <script>
-                 setTimeout(function() {
-                     $('#def').fadeOut('slow');
-                 }, 5000);
-                 </script>
+  <g:if test="${flash.message}">
+     <div class="alert alert-success" style="display: block" id="def">${flash.message}</div>
+      </g:if>
+      <script>
+      setTimeout(function() {
+      $('#def').fadeOut('slow');
+       }, 5000);
+     </script>
 
        <g:if test="${flash.error}">
                <div class="alert alert-warning" style="display: block" id="abc">${flash.error}</div>
@@ -27,19 +27,7 @@
                $('#abc').fadeOut('slow');
            }, 5000);
            </script>
-<div class="container">
-  <div class="panel panel-primary" style="background-color:lightblue";>
-  <div class="panel-body">
-   <div class="col-lg-8">
-    <h3><u>Link Sharing</u></h3>
-   </div>
-  <div class="col-lg-4">
-   <input type="text" id=f1 placeholder="Search">
-   <span class="glyphicon glyphicon-search"></span>
-</div>
-  </div>
-</div>
-</div>
+   <g:render template="toppanel"/>
 
 <div class="container">
   <div class="col-lg-7">
@@ -50,15 +38,15 @@
             <g:img dir="images" file="person.jpeg" class="img-rounded" width="70" height="80"/>
           </div>
           <div class="col-lg-10">
+           <g:each in= "${resource}">
           <div class="row">
-            <div class="col-lg-7"><b>Uday Pratap Singh</b></div>
-            <div class="col-lg-5" style="color:blue";>Grails</div>
+            <div class="col-lg-7"><b>${it.resourceTopic.createdBy.userName}</b></div>
+            <div class="col-lg-5" style="color:blue";>${it.resourceTopic.name}</div>
           </div>
           <div class="row">
-            <p>Bootstrap is the most popular HTML, CSS, and JavaScript framework for <br/>developing responsive, mobile-first websites.
-
-               Bootstrap is completely free to download and use</p>
+            <p>${it.description}</p>
           </div>
+          </g:each>
           <div class="row">
             <div class="col-lg-8">
               <g:img dir="images" file="facebook.png" class="img-rounded" width="20" height="20"/>
@@ -78,13 +66,11 @@
         </div>
         <div class="col-lg-10">
         <div class="row">
-          <div class="col-lg-7"><b>Uday Pratap Singh</b></div>
-          <div class="col-lg-5" style="color:blue";>Grails</div>
+          <div class="col-lg-7"><b></b></div>
+          <div class="col-lg-5" style="color:blue";></div>
         </div>
         <div class="row">
-          <p>  Bootstrap is the most popular HTML, CSS, and JavaScript framework for <br/>developing responsive, mobile-first websites.
-
-                Bootstrap is completely free to download and use</p>
+          <p></p>
         </div>
         <div class="row">
           <div class="col-lg-8">
@@ -128,7 +114,7 @@
        <br />
 
       <div class="row">
-        <a  class="col-sm-6" href="#" >Forgot password</a>
+        <g:link action="mail">Forgot password</g:link>
           <div class="col-sm-6">
               <g:submitButton name="Login"/>
       </div>

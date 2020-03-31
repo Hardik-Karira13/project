@@ -2,9 +2,8 @@ package linkshare
 
 class Subscription {
     Topic topic
-    Users user
     Date dateCreated
-    //Date lastUpdated
+    static belongsTo=[user:Users]
     String seriousness
     static constraints={
         dateCreated nullable:true
@@ -13,7 +12,4 @@ class Subscription {
         seriousness(blank:false,nullable:true)
     }
 
-  /*  static mapping={
-        seriousness defaultValue:"'Serious'"
-    }*/
 }

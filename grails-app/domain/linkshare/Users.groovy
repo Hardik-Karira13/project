@@ -12,9 +12,10 @@ class Users {
     byte[] photo
     Date dateCreated
     Date lastUpdated
-    boolean active
+    boolean active=true
     boolean admin
     static transients = ['confirmPassword','active','admin']
+    static hasMany=[topics:Topic,subscriptions:Subscription,resources:Resources]
 
 
     static constraints = {
@@ -26,12 +27,7 @@ class Users {
         dateCreated nullable:true
         lastUpdated nullable:true
          password(size: 5..15, blank: false)
-        confirmPassword(bindable: true, nullable: true, blank: true,validator: { val, obj ->
-            if (obj.password == val) {
-                return true
-                println "credendial matches"
-            }
-        })
+        confirmPassword(nullable: true, blank: true)
         active(blank: false, nullable: true)
         admin nullable: true
     }

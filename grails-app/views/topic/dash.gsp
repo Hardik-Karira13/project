@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<asset:javascript src="link.js"/>
+<asset:javascript src="document.js"/>
+<asset:javascript src="reading.js"/>
 </head>
 <body>
   <g:if test="${flash.message}">
@@ -49,7 +52,7 @@
   <span class="caret"></span></button>
   <ul class="dropdown-menu">
     <li><a href="#">Profile</a></li>
-    <li><g:link controller="users" action="abc">Users</g:link></li>
+    <li><g:link controller="users" action="allUser">Users</g:link></li>
     <li><g:link controller="topic" action="topics">Topics</g:link></li>
     <li><g:link controller="topic" action="posts">Posts</g:link></li>
     <li><g:link action="logoff">Logout</g:link></li>
@@ -73,15 +76,15 @@
           </div>
           <div class="col-sm-8">
           <div class="row">
-            <b><h4>Uday Pratap Singh</h4></b>
+            <b><h4>${session.email}</h4></b>
           </div>
           <div class="row">
             <div class="col-xs-6">Subscriptions</div>
             <div class="col-xs-6">Topics</div>
           </div>
           <div class="row">
-            <div class="col-xs-6"><span class="badge">50</span></div>
-            <div class="col-xs-6"><span class="badge">30</span></div>
+            <div class="col-xs-6"><span class="badge">${Subscription?.count()}</span></div>
+            <div class="col-xs-6"><span class="badge">${Topic?.count()}</span></div>
           </div>
 </div>
 </div>
@@ -97,8 +100,8 @@
       </div>
       <div class="col-sm-10">
       <div class="row">
-        <div class="col-sm-7"><b>Uday Pratap Singh</b></div>
-        <div class="col-sm-5" style="color:blue";>Grails</div>
+        <div class="col-sm-7"><b></b></div>
+        <div class="col-sm-5" style="color:blue";></div>
       </div>
       <div class="row">
         <p>Bootstrap is the most popular HTML, CSS, and JavaScript framework for <br/>developing responsive, mobile-first websites.
@@ -145,7 +148,7 @@
       <div class="col-sm-9">
           <span><a href="#"><u>Download</u></a>
           <a href="#"><u>View Full Site</u></a>
-            <a href="#"><u>Mark as Read</u></a>
+            <a href="#" id="read"><u>Mark as Read</u></a>
         <a href="#"><u>View Post</u></a></span>
       </div>
     </div>
@@ -183,7 +186,7 @@
             <div class="col-xs-3">Topics</div>
           </div>
           <div class="row">
-              <div class="col-xs-6"><a href="#"><u>Unsubscribe</u></a></div>
+              <div class="col-xs-6"><g:link action="deleteSubs" ><u>Unsubscribe</u></g:link></div>
             <div class="col-xs-3"><span class="badge">50</span></div>
             <div class="col-xs-3"><span class="badge">30</span></div>
           </div>
@@ -215,7 +218,7 @@
   <div class="col-xs-3">Topics</div>
 </div>
 <div class="row">
-    <div class="col-xs-6"><a href="#"><u>Unsubscribe</u></a></div>
+    <div class="col-xs-6"><g:link action="deleteSubs"><u>Unsubscribe</u></g:link></div>
   <div class="col-xs-3"><span class="badge">50</span></div>
   <div class="col-xs-3"><span class="badge">30</span></div>
 </div>
@@ -327,7 +330,7 @@
         <label >Email*</label>
       </div>
       <div class="col-lg-8">
-        <input type="text" name="eml" placeholder="Email" />
+        <input type="text" name="email1" placeholder="Email" />
       </div>
     </div>
     <div class="row">
@@ -335,7 +338,7 @@
         <label >Topic*</label>
       </div>
       <div class="col-lg-8">
-      <input type="text" name="tpic" placeholder="Topic">
+      <g:select from="${topic}" name="topic1"/>
       </div>
 </div>
 <div class="row">
@@ -350,7 +353,7 @@
 </div>
 </g:form>
 
-<g:form action='second'>
+<g:form action="saveTopic">
 <div class="modal fade" id="myModal1" role="dialog">
   <div class="modal-dialog">
 
@@ -363,7 +366,7 @@
         <label >Name*</label>
       </div>
       <div class="col-lg-8">
-        <input type="text" name="nme" placeholder="Name" />
+        <input type="text" name="nme" id="ne" placeholder="Name" />
       </div>
     </div>
     <div class="row">
@@ -371,13 +374,13 @@
         <label >Visibility*</label>
       </div>
       <div class="col-lg-8">
-        <g:select from="${book}" name="visi"/>
+        <g:select from="${book}" name="visi" id="vis"/>
       </div>
 </div>
 <div class="row">
 <div class="col-lg-8"></div>
 <div class="col-lg-4">
-   <g:submitButton name='Save'/>
+  <g:submitButton name="Save"/>
 </div>
 </div>
     </div>
@@ -386,7 +389,6 @@
 </div>
 </g:form>
 
-<g:form action='link'>
 <div class="modal fade" id="myModal2" role="dialog">
   <div class="modal-dialog">
 
@@ -399,7 +401,7 @@
         <label >Link*</label>
       </div>
       <div class="col-lg-8">
-        <input type="text" name="lnk" placeholder="Link" />
+        <input type="text" name="lnk" id="ln" placeholder="Link" />
       </div>
     </div>
     <div class="row">
@@ -407,7 +409,7 @@
         <label >Description*</label>
       </div>
       <div class="col-lg-8">
-        <input type="text" name="des" placeholder="Description" />
+        <g:textArea type="text" name="des" id="dec" placeholder="Description" />
       </div>
     </div>
     <div class="row">
@@ -415,22 +417,22 @@
         <label >Topic*</label>
       </div>
       <div class="col-lg-8">
-        <input type="text" name="tpic1" placeholder="Topic" />
+        <g:select from="${topic}" name="tpic1" id="tp1"/>
       </div>
   </div>
   <div class="row">
   <div class="col-lg-8"></div>
   <div class="col-lg-4">
-  <g:submitButton name='Share'/>
+  <button type="button" id="lk">Share</button>
   </div>
   </div>
     </div>
 </div>
 </div>
 </div>
-</g:form>
 
-<g:form action='doc'>
+
+
 <div class="modal fade" id="myModal3" role="dialog">
   <div class="modal-dialog">
 
@@ -443,7 +445,7 @@
         <label >Document*</label>
       </div>
       <div class="col-lg-8">
-        <input type="file" name="doc" placeholder="Document" />
+        <input type="file" name="doc" id="dc1" placeholder="Document" />
       </div>
     </div>
     <div class="row">
@@ -451,7 +453,7 @@
         <label >Description*</label>
       </div>
       <div class="col-lg-8">
-        <input type="text" name="des1" placeholder="Description" />
+        <g:textArea type="text" name="des1" id="dec1" placeholder="Description" />
       </div>
     </div>
     <div class="row">
@@ -459,21 +461,21 @@
         <label >Topic*</label>
       </div>
       <div class="col-lg-8">
-        <input type="text" name="tpic2" placeholder="Topic" />
+        <g:select from="${topic}" name="tpic2" id="tp2"/>
       </div>
 
 </div>
 <div class="row">
 <div class="col-lg-8"></div>
 <div class="col-lg-4">
-    <g:submitButton name='Share'/>
+     <button type="button" id="dc">Share</button>
 </div>
 </div>
     </div>
 </div>
 </div>
 </div>
-</g:form>
+
 
 <div class="modal fade" id="myModal4" role="dialog">
   <div class="modal-dialog">

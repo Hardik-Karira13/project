@@ -1,7 +1,9 @@
 package linkshare
 
-
+import grails.converters.JSON
 import org.springframework.beans.factory.annotation.Autowired
+
+import java.beans.Visibility
 
 class TopicController {
      @Autowired
@@ -10,62 +12,67 @@ class TopicController {
         def books=["Public","Private"]
         render(view:'dash',model:[book:books])
     }
-    def second(){
+    def saveTopic(){
         Topic l2=new Topic(name:params.nme,visibility: params.visi)
-        //Users.findByUserName(session.email)
         l2.createdBy=Users.findByUserName(session.email)
         l2.save(flush:true)
+        if(l2.hasErrors()){
+            l2.errors.allErrors.each{println it}
+        }
+          Users u5=Users.findByUserName(session.email)
         Subscription s=new Subscription()
         s.user=Users.findByUserName(session.email)
-        s.topic=l2
+        s.topic=Topic.findByCreatedBy(u5)
         s.seriousness="Serious"
         s.save(flush: true)
         if(!topicService.method1(s))
         {
             s.errors.allErrors.each{println it}
         }
-        flash.message="Topic created and Subscribed"
-        render(view:'dash')
+        List<Topic> topics=Topic.findAllByCreatedBy(u5).name
+         render(view: 'dash',model: [topic:topics])
+         //render([success:true,statuscode:200,userd:Users.first().properties] as JSON)
     }
     def link(){
-        Resources r=new Resources()
-        r.description=params.des
-        r.ruser=Users.findByUserName(session.email)
-        r.rtopic=Topic.findByName(params.tpic1)
-        r.save(flush:true)
-        if(r.hasErrors()){
-           r.errors.allErrors.each{
+        Resources resource1=new Resources()
+        resource1.description=params.des
+        resource1.resourceUser=Users.findByUserName(session.email)
+        resource1.resourceTopic=Topic.findByName(params.tpic1)
+        resource1.save(flush:true)
+        if(resource1.hasErrors()){
+           resource1.errors.allErrors.each{
                 println it
             }
         }
-        LinkResources lr=new LinkResources()
-        lr.url=params.lnk
-        lr.properties=r.properties
-        lr.save(flush:true)
-        flash.message="Link Created"
-        render(view: 'dash')
+        LinkResources linkResource1=new LinkResources()
+        linkResource1.url=params.lnk
+        linkResource1.properties=resource1.properties
+        linkResource1.save(flush:true)
+       // flash.message="Link Created"
+        render([success:true,statuscode:200,usery:Topic.first().properties] as JSON)
     }
     def doc(){
-        Resources r1=new Resources()
-        r1.description=params.des1
-        r1.ruser=Users.findByUserName(session.email)
-        r1.rtopic=Topic.findByName(params.tpic2)
-        r1.save(flush:true)
-        if(r1.hasErrors()){
-            r1.errors.allErrors.each{
+        Resources resource2=new Resources()
+        resource2.description=params.des1
+        resource2.resourceUser=Users.findByUserName(session.email)
+        resource2.resourceTopic=Topic.findByName(params.tpic2)
+        resource2.save(flush:true)
+        if(resource2.hasErrors()){
+            resource2.errors.allErrors.each{
                 println it
             }
         }
-        DocumentResources dr=new DocumentResources()
-        dr.document=params.doc
-        dr.properties=r1.properties
-        dr.save(flush:true)
-        flash.message="Document Created"
-        render(view: 'dash')
+        DocumentResources documentResource1=new DocumentResources()
+        documentResource1.document=params.doc
+        documentResource1.properties=resource2.properties
+        documentResource1.save(flush:true)
+        //flash.message="Document Created"
+        render([success:true,statuscode:200,userx:Topic.first().properties] as JSON)
     }
     def posts(){
         render(view:'posts')
     }
+
     def topics()
     {
         render(view:'topics')
@@ -87,100 +94,34 @@ class TopicController {
     def logoff()
     {
         Users u=Users.findByUserName(session.email)
-        u.active=0
+        u.active=false
         session.invalidate()
         redirect(controller:'users')
     }
-
-    /*TopicService topicService
-
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond topicService.list(params), model:[topicCount: topicService.count()]
-    }
-
-    def show(Long id) {
-        respond topicService.get(id)
-    }
-
-    def create() {
-        respond new Topic(params)
-    }
-
-    def save(Topic topic) {
-        if (topic == null) {
-            notFound()
-            return
-        }
-
-        try {
-            topicService.save(topic)
-        } catch (ValidationException e) {
-            respond topic.errors, view:'create'
-            return
-        }
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
-                redirect topic
-            }
-            '*' { respond topic, [status: CREATED] }
-        }
-    }
-
-    def edit(Long id) {
-        respond topicService.get(id)
-    }
-
-    def update(Topic topic) {
-        if (topic == null) {
-            notFound()
-            return
-        }
-
-        try {
-            topicService.save(topic)
-        } catch (ValidationException e) {
-            respond topic.errors, view:'edit'
-            return
-        }
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
-                redirect topic
-            }
-            '*'{ respond topic, [status: OK] }
-        }
-    }
-
-    def delete(Long id) {
-        if (id == null) {
-            notFound()
-            return
-        }
-
-        topicService.delete(id)
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'topic.label', default: 'Topic'), id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'topic.label', default: 'Topic'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
+    /*def saveRating(){
+        ResourceRate resourceRate=new ResourceRate()
+        resourceRate.userRating=Users.findByUserName(session.email)
+        resourceRate.resources=Resources.findByResourceUser(session.email)
+        resourceRate.score=1
+        render([success: true,statuscode: 200] as JSON)
     }*/
+    def reading(){
+        ReadingItem readingItem=new ReadingItem()
+        readingItem.userRead=Users.findByUserName(session.email)
+        readingItem.resourceRead=Resources.findByResourceUser(session.email)
+        readingItem.isRead=true
+        if(readingItem.hasErrors()){
+            readingItem.errors.allErrors.each{
+                println it
+            }
+        }
+        readingItem.save(flush:true)
+        render([success: true,statuscode: 200] as JSON)
+    }
+    def deleteSubs(){
+        Users u5=Users.findByUserName(session.email)
+        Subscription subscription=Subscription.findByUser(u5)
+        subscription?.delete(flush:true)
+        render(view:'dash')
+    }
 }

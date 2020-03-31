@@ -2,17 +2,17 @@ package linkshare
 
 class Resources {
     String description
-    Users ruser
-    Topic rtopic
+    static belongsTo=[resourceUser:Users,resourceTopic:Topic]
     Date dateCreated
     Date lastUpdated
+    static hasMany=[resourceRatings:ResourceRate]
 
     static constraints = {
         dateCreated nullable:true
         lastUpdated nullable:true
         description(nullable:false, blank:false)
-        ruser nullable:false
-        rtopic nullable:false
+        resourceUser nullable:false
+        resourceTopic nullable:false
     }
     static mapping={
         tablePerHierarchy false

@@ -1,12 +1,12 @@
 package linkshare
 
 class ReadingItem {
-     Resources iresource
-     Users iuser
+     Resources resourceRead
+     Users userRead
      boolean isRead
     static constraints = {
         isRead(nullable:false,blank:false)
-        iresource nullable:true
-        iuser nullable:true
+        resourceRead nullable:true
+        userRead nullable:true
     }
 }

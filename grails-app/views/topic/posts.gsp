@@ -10,6 +10,25 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+<script>
+$(document).ready(function(){
+ $("#q").click(function(){
+     $(this).toggleClass('glyphicon-heart-empty glyphicon-heart')
+ });
+ $("#w").click(function(){
+      $(this).toggleClass('glyphicon-heart-empty glyphicon-heart')
+  });
+  $("#e").click(function(){
+       $(this).toggleClass('glyphicon-heart-empty glyphicon-heart')
+   });
+   $("#r").click(function(){
+        $(this).toggleClass('glyphicon-heart-empty glyphicon-heart')
+    });
+    $("#t").click(function(){
+         $(this).toggleClass('glyphicon-heart-empty glyphicon-heart')
+     });
+});
+</script>
 <div class="container">
   <div class="panel panel-primary" style="background-color:lightblue";>
   <div class="panel-body">
@@ -69,11 +88,11 @@
             <div class="col-sm-8"></div>
             <div class="col-sm-4">
               <span>
-              <span class="glyphicon glyphicon-heart"></span>
-              <span class="glyphicon glyphicon-heart"></span>
-              <span class="glyphicon glyphicon-heart-empty"></span>
-              <span class="glyphicon glyphicon-heart-empty"></span>
-              <span class="glyphicon glyphicon-heart-empty"></span>
+              <span class="glyphicon glyphicon-heart-empty" id="q" ></span>
+              <span class="glyphicon glyphicon-heart-empty" id="w" ></span>
+              <span class="glyphicon glyphicon-heart-empty" id="e"></span>
+              <span class="glyphicon glyphicon-heart-empty" id="r"></span>
+              <span class="glyphicon glyphicon-heart-empty" id="t"></span>
             </span>
             </div>
           </div>
@@ -170,8 +189,6 @@
 
       </div>
       </div>
-
-
 
   </div>
 </div>
